@@ -7,7 +7,7 @@ from binance.enums import *
 from datetime import datetime
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(filename)s - %(funcName)s(): %(message)s',
     handlers=[
         logging.FileHandler('rsi_trading.log', encoding='utf-8'),
@@ -16,7 +16,7 @@ logging.basicConfig(
 )
 
 API_KEY = ''
-API_SECRET = ''  
+API_SECRET = ''
 
 client = Client(API_KEY, API_SECRET)
 client.API_URL = 'https://testnet.binance.vision/api'
@@ -122,7 +122,8 @@ def run_bot():
                     logging.info(f"총 누적 손익: {total_profit:.2f} USDT")
 
             current_balance = usdt_balance + (btc_balance * current_price)
-            profit_percentage = ((current_balance - initial_balance) / initial_balance) * 100
+            if trade_count == 0: profit_percentage = 0.0
+            else: profit_percentage = ((current_balance - initial_balance) / initial_balance) * 100
             logging.info(f"현재 총 손익률: {profit_percentage:.2f}%")
 
             time.sleep(900)
